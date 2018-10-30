@@ -1,21 +1,25 @@
-import React from 'react'
-//Credit to https://tomchentw.github.io/react-google-maps/#installation for instructions on adding react-google-maps
-import { GoogleMap } from "google-maps-react"
+import React, {Component} from 'react'
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 
-
-const mapComponent = (props) => {
-    <GoogleMap
-        defaultZoom={12}
-        defaultCenter={{ lat: 40.117243, lng: -88.240827 }}
-    >
-    </GoogleMap>
-}
-
-const Map = (props) => {
-    return(
-    <MapComponent
-    />
-    )}
-
-
-export default Map
+// Credit to google-maps-react documentation for clarifying steps https://www.npmjs.com/package/google-maps-react
+export class MapContainer extends Component {
+    render() {
+      return (
+        <Map google={this.props.google} zoom={14}>
+   
+          {/* <Marker onClick={this.onMarkerClick}
+                  name={'Current location'} />
+   
+          <InfoWindow onClose={this.onInfoWindowClose}>
+              <div>
+                <h1>{this.state.selectedPlace.name}</h1>
+              </div>
+      </InfoWindow> */}
+        </Map>
+      );
+    }
+  }
+   
+  export default GoogleApiWrapper({
+    apiKey: 'AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8'
+  })(MapContainer)
