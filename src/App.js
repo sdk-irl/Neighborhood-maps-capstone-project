@@ -1,27 +1,32 @@
-import React, { Component } from 'react';
-import './App.css';
-import Map from './components/Map';
+import React, { Component } from 'react'
+import './App.css'
+import MapContainer from './components/MapContainer'
+//will need to import locations data
 
 class App extends Component {
   state = {
-    lat: 40.1164, 
-    lng: 88.2434,
-    zoom: 12,
-//    all: locations
+    //    all: locations
+    lat: 40.117243, 
+    lng: -88.240827,
+    zoom: 13,
   }
 
   render() {
     return (
       <div className="App">
-        <Map
+        <div>
+          <h1>Name of this app</h1>
+        </div>
+        <MapContainer
+          //  locations={this.state.all}
           lat={this.state.lat}
           lng={this.state.lng}
           zoom={this.state.zoom}
-//          locations={this.state.all}
+          aria-label='map'
         />
       </div>
     );
   }
 }
 
-export default App;
+export default App
