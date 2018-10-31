@@ -22,7 +22,6 @@ class App extends Component {
           lat={this.state.lat}
           lng={this.state.lng}
           zoom={this.state.zoom}
-          aria-label='map'
         />
       </div>
     );
