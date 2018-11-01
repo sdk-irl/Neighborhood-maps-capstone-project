@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 //bootstrapped this app with google-maps-react and now importing necessary items from this API
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
+import { homedir } from 'os';
 
 //set the API key here to use later and change easier if needed
 const API_KEY = 'AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8';
@@ -15,7 +16,7 @@ class MapContainer extends Component {
 
   //when the map is loaded, run this function
   componentDidMount() {
-
+    //TODO
   }
 
   //update the marker from the null state
@@ -23,26 +24,38 @@ class MapContainer extends Component {
     // If no locations exist or they've all been filtered, we're done--credit: https://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
     if (!locations) 
       return;
-    
+      console.log(locations);
     //TODO: remove existing markers
-    
+    //declare marker properties as an array inside this function
+    let markerProps = [];
     //iterate over locations to create markers and properties
-    let markerProps = this.state.markerProps;
-    let markers = locations.map((location, index) => {
-      let markerPropsIn = {
-        key: index,
-        index,
-        name: location.name,
-      }
-      markerProps.push(markerPropsIn);
-    }) 
+    //Credit this article for using .map instead of forEach (https://jjude.com/react-array/)
+    let markers = locations.map((location) => {
+      let markerData = {
+        restaurantName: location.name,
+        position: location.pos,
+        bestKnownFor: location.bestKnownFor,
+      };
+      markerProps.push(markerData);
+
+      let marker = new this.props.google.maps.Marker({
+        map: this.state.map,
+        position: location.pos,
+      })
+      return marker;
+    });  
+    //marker.addListener('click', function() => {
+    //  infowindow.open(map, marker);
+    //}
+    
+  
   } 
 
-    //TODO: add markers to the map
-
-
-  //when the map is loaded...
-  mapStart = (mapProps, map, clickEvent) => {
+  //when the map is loaded, set the state and fetch the places
+  fetchPlaces = (mapProps, map) => {
+    const {google} = mapProps;
+    const service = new google.maps.places.PlacesService(map);
+    console.log(service);
     this.setState({map});
     this.setState({mapProps});
     this.resetMarkers(this.props.locations);
@@ -62,7 +75,7 @@ class MapContainer extends Component {
       <Map
         aria-label='map'
         google={this.props.google}
-        onReady={this.mapStart}
+        onReady={this.fetchPlaces}
         style={style}
         initialCenter={mapCenter}
         zoom={this.props.zoom}

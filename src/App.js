@@ -8,7 +8,7 @@ class App extends Component {
     all: locations,
     lat: 40.117243, 
     lng: -88.240827,
-    zoom: 13,
+    zoom: 16,
   }
 
   render() {
