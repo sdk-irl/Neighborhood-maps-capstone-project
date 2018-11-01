@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import './App.css'
 import MapContainer from './components/MapContainer'
-//will need to import locations data
+import locations from './data/locations.json'
 
 class App extends Component {
   state = {
-    //    all: locations
+    all: locations,
     lat: 40.117243, 
     lng: -88.240827,
     zoom: 13,
@@ -18,7 +18,7 @@ class App extends Component {
           <h1>Name of this app</h1>
         </div>
         <MapContainer
-          //  locations={this.state.all}
+          locations={this.state.all}
           lat={this.state.lat}
           lng={this.state.lng}
           zoom={this.state.zoom}

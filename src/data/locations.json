@@ -1,0 +1,92 @@
+[
+    {
+        "name": "Black Dog Smoke & Ale House",
+        "street": "320 N. Chestnut St.",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "barbeque",
+        "pos": {"lat":40.117933, "lng":-88.273080 }
+    },
+    {
+        "name": "Miga",
+        "street": "301 N. Neil, #104",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "artistic sushi",
+        "pos": {"lat":40.118426, "lng":-88.243972 }
+    },
+    {
+        "name": "Destihl",
+        "street": "301 N. Neil, #105",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "boldly flavored pub fare",
+        "pos": {"lat":40.118471 , "lng":-88.243779 }
+    },
+    {
+        "name": "Maize",
+        "street": "100 N. Chestnut St.",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "Mexican food",
+        "pos": {"lat":40.116830 , "lng":-88.240550 }
+    },
+    {
+        "name": "Seven Saints",
+        "street": "32 E. Chester St.",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "cocktails and sliders",
+        "pos": {"lat":40.116551, "lng":-88.241999 }
+    },
+    {
+        "name": "Hamilton Walkers",
+        "street": "201 N. Neil",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "cocktails",
+        "pos": {"lat":40.117490, "lng":-88.243870 }
+    },
+    {
+        "name": "Watson's Shack & Rail",
+        "street": "211 N. Neil",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "fried chicken",
+        "pos": {"lat":40.117730, "lng":-88.243880}
+    },
+    {
+        "name": "Pekara Bakery & Bistro",
+        "street": "116 N. Neil",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "desserts",
+        "pos": {"lat":40.117050, "lng":-88.243300}
+    },
+    {
+        "name": "Aroma Cafe",
+        "street": "118 N. Neil",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "coffee",
+        "pos": {"lat":40.117125 , "lng":-88.243248 }
+    },
+    {
+        "name": "Sam's Cafe",
+        "street": "115 N. Walnut",
+        "city": "Champaign",
+        "state": "Illinois",
+        "zip": "61820",
+        "bestKnownFor": "unpretentious breakfast fare",
+        "pos": {"lat":40.116980, "lng":-88.242650}
+    }
+]
