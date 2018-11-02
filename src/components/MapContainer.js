@@ -4,6 +4,10 @@ import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
 
 //set the API key here to use later and change easier if needed
 const API_KEY = 'AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8';
+const FourSquare_CLIENT = '';
+const FourSquare_SECRET = '';
+const FourSquare_VERSION = '';
+
 
 //Used this documentation extensively to write this component https://www.npmjs.com/package/google-maps-react
 class MapContainer extends Component {
@@ -42,9 +46,6 @@ class MapContainer extends Component {
     this.hideInfoWindow();
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
     //set the state to show marker info (google maps react documentation https://www.npmjs.com/package/google-maps-react) 
-    let oneMarker= () => {
-
-    }
     this.setState({
       selectedMarker: marker,
       selectedMarkerProps: markerProps,
@@ -116,7 +117,7 @@ class MapContainer extends Component {
           onClose={this.state.hideInfoWindow}
         >
           <div>
-            <h3>{this.state.selectedMarkerProps && this.state.selectedMarkerProps.name}</h3>
+            <h3>Something's wrong with this data {this.state.selectedMarkerProps && this.state.selectedMarkerProps.name}</h3>
           </div>
         </InfoWindow>
       </Map>
