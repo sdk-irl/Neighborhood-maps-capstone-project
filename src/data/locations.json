@@ -18,22 +18,13 @@
         "pos": {"lat":40.118426, "lng":-88.243972 }
     },
     {
-        "name": "Destihl",
-        "street": "301 N. Neil, #105",
-        "city": "Champaign",
-        "state": "Illinois",
-        "zip": "61820",
-        "bestKnownFor": "boldly flavored pub fare",
-        "pos": {"lat":40.11749 , "lng":-88.24387 }
-    },
-    {
         "name": "Maize",
         "street": "100 N. Chestnut St.",
         "city": "Champaign",
         "state": "Illinois",
         "zip": "61820",
         "bestKnownFor": "Mexican food",
-        "pos": {"lat":40.116830 , "lng":-88.240550 }
+        "pos": {"lat":40.116830, "lng":-88.240550 }
     },
     {
         "name": "Seven Saints",

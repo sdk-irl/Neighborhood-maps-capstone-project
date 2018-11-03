@@ -24,7 +24,11 @@ class MapContainer extends Component {
   // when the map is loaded, run this function
   componentDidMount() {
     //TODO
-  }
+    // listening for authentication failures from Google maps
+    //window.gm_authFailure = () => {
+    //  alert('ERROR!! \nFailed to get Google maps.')
+    //  console.log('ERROR!! \nFailed to get Google maps.')
+   }
 
   // when the map is loaded, set the state and fetch the places
   fetchPlaces = (mapProps, map) => {
@@ -43,16 +47,15 @@ class MapContainer extends Component {
   }
 
   // find businesses in foursquare data that match my locations.json
-  findBusinessMatch = (selectedMarkerProps, fsData) => {
-    console.log(selectedMarkerProps, 'fsdata:', fsData);
+  findBusinessMatch = (markerProps, fsData) => {
+    console.log(markerProps.restaurantName, fsData.response.venues);
     let BusinessMatch = fsData.response.venues.filter(item => 
       // checking for both restaurant names from the foursquare data restaurant names that include location.json restaurant names, 
       // or restaurant names from location.json that include the foursquare data restaurant names.
       // Both are needed because one is sometimes longer than the other in the data.
       // Does not check for inexact matches except for length. 
-      item.name.includes (selectedMarkerProps.restaurantName) || 
-      selectedMarkerProps.restaurantName.includes(item.name));
-      console.log(BusinessMatch);
+      item.name.includes(markerProps.restaurantName) || 
+      markerProps.restaurantName.includes(item.name));
     return BusinessMatch;
   }
 
@@ -61,8 +64,9 @@ class MapContainer extends Component {
     this.hideInfoWindow();
 
     // variable declaring foursquare URL that embeds the client ID, secret, and version variables
-    let FS_url = `https://api.foursquare.com/v2/venues/explore?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}&limit=1&ll=${markerProps.position.lat}, ${markerProps.position.lng}, &query=restaurant`
-    let headers = new Headers(); //TODO figure out whether this needs parens
+    let FS_url = `https://api.foursquare.com/v2/venues/search?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}&radius=250&ll=${markerProps.position.lat},${markerProps.position.lng}&query=restaurant`
+
+    let headers = new Headers();
     // variable declaring a new request that inputs the foursquare URL
     let request = new Request(FS_url, {
       method: 'GET',
@@ -80,7 +84,10 @@ class MapContainer extends Component {
           fsRestaurant: restaurant[0],
           ...markerProps
         }
-      })
+      }
+
+      //TODO: if my selectedMarkerProps
+      )
 
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
     // credit: for next line of code, with my own modification for second bounce 
