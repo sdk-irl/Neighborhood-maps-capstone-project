@@ -99,10 +99,15 @@ class MapContainer extends Component {
             console.log(result);
             //TODO: need to handle exceptions that don't have an includesToday when it's returning correct thing
             //if it is open today
-            //TODO: DOES NOT RETURN APPROPRIATE THINGS
-            let today = result.response.hours.timeframes.filter(item => (item.days.includesToday));
-            console.log(today);
-            //else to capture those that aren't open today
+            if (result.response.hours) {
+              console.log(result.response)
+              //let today = result.response.hours.timeframes.filter(item => (item.includesToday));
+              //console.log(today);
+            }
+            else {
+              //else to capture those that aren't open today
+              console.log('Not open today.')
+            }
           })   
       }
       
