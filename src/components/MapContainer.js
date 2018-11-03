@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 // bootstrapped this app with google-maps-react and now importing necessary items from this API
 import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
+import { linkSync } from 'fs';
 
 // set the API key here to use later and change easier if needed
 const API_KEY = 'AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8';
@@ -48,12 +49,11 @@ class MapContainer extends Component {
 
   // find businesses in foursquare data that match my locations.json
   findBusinessMatch = (markerProps, fsData) => {
-    console.log(markerProps.restaurantName, fsData.response.venues);
-    let BusinessMatch = fsData.response.venues.filter(item => 
       // checking for both restaurant names from the foursquare data restaurant names that include location.json restaurant names, 
       // or restaurant names from location.json that include the foursquare data restaurant names.
       // Both are needed because one is sometimes longer than the other in the data.
       // Does not check for inexact matches except for length. 
+    let BusinessMatch = fsData.response.venues.filter(item => 
       item.name.includes(markerProps.restaurantName) || 
       markerProps.restaurantName.includes(item.name));
     return BusinessMatch;
@@ -64,7 +64,7 @@ class MapContainer extends Component {
     this.hideInfoWindow();
 
     // variable declaring foursquare URL that embeds the client ID, secret, and version variables
-    let FS_url = `https://api.foursquare.com/v2/venues/search?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}&radius=250&ll=${markerProps.position.lat},${markerProps.position.lng}&query=restaurant`
+    let FS_url = `https://api.foursquare.com/v2/venues/search?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}&radius=250&ll=${markerProps.position.lat},${markerProps.position.lng}&limit=10`
 
     let headers = new Headers();
     // variable declaring a new request that inputs the foursquare URL
@@ -77,17 +77,36 @@ class MapContainer extends Component {
     fetch(request)
       .then(response => response.json())
       .then(result => {
-        // obtain the individual matching restaurant from
-        console.log('markerProps', markerProps, 'result:', result, 'selectedMarkerProps', selectedMarkerProps)
+        // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to selectedMarkerProps array
         let restaurant = this.findBusinessMatch(markerProps, result);
         selectedMarkerProps = {
           fsRestaurant: restaurant[0],
           ...markerProps
-        }
-      }
+        };
 
-      //TODO: if my selectedMarkerProps
-      )
+      //if a restaurant matched, get its hours from foursquare
+      if (selectedMarkerProps.fsRestaurant) {
+        let venueId = selectedMarkerProps.fsRestaurant.id; 
+        let headers = new Headers();
+        let url = `https://api.foursquare.com/v2/venues/${venueId}/hours?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}`;
+        let request = new Request(url, {
+          method: 'GET',
+          headers
+        });
+        fetch(request)
+          .then(response => response.json())
+          .then(result => {
+            console.log(result);
+            //TODO: need to handle exceptions that don't have an includesToday when it's returning correct thing
+            //if it is open today
+            //TODO: DOES NOT RETURN APPROPRIATE THINGS
+            let today = result.response.hours.timeframes.filter(item => (item.days.includesToday));
+            console.log(today);
+            //else to capture those that aren't open today
+          })   
+      }
+      
+    });
 
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
     // credit: for next line of code, with my own modification for second bounce 
@@ -173,7 +192,6 @@ class MapContainer extends Component {
   }
 }
 
-   
   export default GoogleApiWrapper({
     apiKey: API_KEY
   })(MapContainer)

@@ -15,7 +15,7 @@ class App extends Component {
     return (
       <div className="App">
         <div>
-          <h1>Name of this app</h1>
+          <h1 className="heading">FoodFinder</h1>
         </div>
         <MapContainer
           locations={this.state.all}
