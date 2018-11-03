@@ -74,49 +74,49 @@ class MapContainer extends Component {
     });
     let selectedMarkerProps; 
     // fetch FourSquare data from API for a restaurant using previously declared request
-    fetch(request)
-      .then(response => response.json())
-      .then(result => {
-        // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to selectedMarkerProps array
-        let restaurant = this.findBusinessMatch(markerProps, result);
-        selectedMarkerProps = {
-          ...markerProps,
-          fsRestaurant: restaurant[0]
-        };
+    // fetch(request)
+    //   .then(response => response.json())
+    //   .then(result => {
+    //     // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to selectedMarkerProps array
+    //     let restaurant = this.findBusinessMatch(markerProps, result);
+    //     selectedMarkerProps = {
+    //       ...markerProps,
+    //       fsRestaurant: restaurant[0]
+    //     };
 
-      //if a restaurant matched, get its hours from foursquare
-      if (selectedMarkerProps.fsRestaurant) {
-        let venueId = selectedMarkerProps.fsRestaurant.id; 
-        let headers = new Headers();
-        let url = `https://api.foursquare.com/v2/venues/${venueId}/hours?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}`;
-        let request = new Request(url, {
-          method: 'GET',
-          headers
-        });
-        fetch(request)
-          .then(response => response.json())
-          .then(result => {
-            console.log(result);
-            //TODO: confirm this is working when back online
-            //if restaurant the result returns the hours object then we filter the timeframes
-            // for those that include today. We set the variable to reflect whether it is open
-            if (result.response.hours) {
-              let today = result.response.hours.timeframes.filter(item => (item.includesToday));
-              selectedMarkerProps = {
-                ...selectedMarkerProps,
-                isOpenToday: today.length > 0 ? 'Open today' : 'Closed today'
-              }
-            }
-            else {
-              //else to capture those that there is no data about whether they are open
-              selectedMarkerProps = {
-                ...selectedMarkerProps,
-                isOpenToday: 'Unknown if restaurant is open today'
-              }
-            }
-          })   
-      }
-    });
+    //   //if a restaurant matched, get its hours from foursquare
+    //   if (selectedMarkerProps.fsRestaurant) {
+    //     let venueId = selectedMarkerProps.fsRestaurant.id; 
+    //     let headers = new Headers();
+    //     let url = `https://api.foursquare.com/v2/venues/${venueId}/hours?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}`;
+    //     let request = new Request(url, {
+    //       method: 'GET',
+    //       headers
+    //     });
+    //     fetch(request)
+    //       .then(response => response.json())
+    //       .then(result => {
+    //         console.log(result);
+    //         //TODO: confirm this is working when back online
+    //         //if restaurant the result returns the hours object then we filter the timeframes
+    //         // for those that include today. We set the variable to reflect whether it is open
+    //         if (result.response.hours) {
+    //           let today = result.response.hours.timeframes.filter(item => (item.includesToday));
+    //           selectedMarkerProps = {
+    //             ...selectedMarkerProps,
+    //             isOpenToday: today.length > 0 ? 'Open today' : 'Closed today'
+    //           }
+    //         }
+    //         else {
+    //           //else to capture those that there is no data about whether they are open
+    //           selectedMarkerProps = {
+    //             ...selectedMarkerProps,
+    //             isOpenToday: 'Unknown if restaurant is open today'
+    //           }
+    //         }
+    //       })   
+    //   }
+    // });
 
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
     // credit: for next line of code, with my own modification for second bounce 
