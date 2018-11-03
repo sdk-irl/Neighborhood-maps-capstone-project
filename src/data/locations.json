@@ -24,7 +24,7 @@
         "state": "Illinois",
         "zip": "61820",
         "bestKnownFor": "boldly flavored pub fare",
-        "pos": {"lat":40.118471 , "lng":-88.243779 }
+        "pos": {"lat":40.11749 , "lng":-88.24387 }
     },
     {
         "name": "Maize",
@@ -60,7 +60,7 @@
         "state": "Illinois",
         "zip": "61820",
         "bestKnownFor": "fried chicken",
-        "pos": {"lat":40.117730, "lng":-88.243880}
+        "pos": {"lat":40.11773, "lng":-88.24388}
     },
     {
         "name": "Pekara Bakery & Bistro",
@@ -87,6 +87,6 @@
         "state": "Illinois",
         "zip": "61820",
         "bestKnownFor": "unpretentious breakfast fare",
-        "pos": {"lat":40.116980, "lng":-88.242650}
+        "pos": {"lat":40.11698, "lng":-88.24265}
     }
 ]
