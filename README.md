@@ -1,5 +1,22 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##FoodFinder App ReadME
+This FoodFinder app is the capstone project for the Udacity Frontend Nanodegree course. 
 
+There was no starter template for this project, but it was was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+It uses HTML, CSS, JS, React, JSX, APIs, and implements service workers to work offline.
+
+## APIs and libraries in use
+- Google maps API (https://developers.google.com/maps/documentation/) to obtain the map and local data
+- google-maps-react (https://www.npmjs.com/package/google-maps-react) to assist with writing the react code needed to render Google maps
+- FourSquare developer API (https://developer.foursquare.com) used to obtain third-party information about the restaurant locations, in this case, days of the week the locations are open.
+
+## Restaurant data
+- Most restaurant data is currently hardcoded in location.json, but the app was built so that this could be changed and data could be obtained frm either Google or FourSquare as needed.
+
+## Pull Requests
+This is a graded project, so I will not accept pull requests prior to late-November 2018. 
+
+## Original Create-React-App documnetation
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md).
 

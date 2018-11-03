@@ -6,7 +6,7 @@ import { linkSync } from 'fs';
 // set the API key here to use later and change easier if needed
 const API_KEY = 'AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8';
 const FourSquare_CLIENT_ID = 'PVZVSGGBQZNENEBHDC5DW1VCALWA1CCUNLL42ZE0XRZOXNKL';
-const FourSquare_SECRET = 'GKFEBJIWGEZDXWUANQPVQTPOITCVS451ZEJ2YK1CYEGMN3QU';
+const FourSquare_SECRET = 'VDI51N2LGSWHZ2NN531VPDZ5DK1XWKCHROGVGC4TUBEIFTKP';
 // set FourSquare version to date of writing, FourSquare says to update every couple of months to ensure on latest version
 const FourSquare_VERSION = '20181102';
 
@@ -80,8 +80,8 @@ class MapContainer extends Component {
         // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to selectedMarkerProps array
         let restaurant = this.findBusinessMatch(markerProps, result);
         selectedMarkerProps = {
-          fsRestaurant: restaurant[0],
-          ...markerProps
+          ...markerProps,
+          fsRestaurant: restaurant[0]
         };
 
       //if a restaurant matched, get its hours from foursquare
@@ -97,20 +97,25 @@ class MapContainer extends Component {
           .then(response => response.json())
           .then(result => {
             console.log(result);
-            //TODO: need to handle exceptions that don't have an includesToday when it's returning correct thing
-            //if it is open today
+            //TODO: confirm this is working when back online
+            //if restaurant the result returns the hours object then we filter the timeframes
+            // for those that include today. We set the variable to reflect whether it is open
             if (result.response.hours) {
-              console.log(result.response)
-              //let today = result.response.hours.timeframes.filter(item => (item.includesToday));
-              //console.log(today);
+              let today = result.response.hours.timeframes.filter(item => (item.includesToday));
+              selectedMarkerProps = {
+                ...selectedMarkerProps,
+                isOpenToday: today.length > 0 ? 'Open today' : 'Closed today'
+              }
             }
             else {
-              //else to capture those that aren't open today
-              console.log('Not open today.')
+              //else to capture those that there is no data about whether they are open
+              selectedMarkerProps = {
+                ...selectedMarkerProps,
+                isOpenToday: 'Unknown if restaurant is open today'
+              }
             }
           })   
       }
-      
     });
 
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
@@ -189,7 +194,16 @@ class MapContainer extends Component {
         >
           <div>
             <h3>{this.state.selectedMarkerProps && this.state.selectedMarkerProps.restaurantName}</h3>
-            <p>Best known for: {this.state.selectedMarkerProps && this.state.selectedMarkerProps.bestKnownFor}</p>
+            <p>
+              Best known for: 
+              {
+                this.state.selectedMarkerProps && 
+                this.state.selectedMarkerProps.bestKnownFor
+              }
+            </p>
+            <p>
+              {this.props.isOpenToday}
+            </p>
           </div>
         </InfoWindow>
       </Map>
