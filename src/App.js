@@ -10,7 +10,7 @@ class App extends Component {
     lat: 40.117243, 
     lng: -88.240827,
     zoom: 16,
-    open: false
+    open: true
   }
 
   styles = {

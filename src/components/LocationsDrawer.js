@@ -6,13 +6,33 @@ import Drawer from '@material-ui/core/Drawer';
 class LocationsDrawer extends Component {
     state = {
         //set initial states of open drawer and user query
-        open: false,
         query: "" //TODO
     }
     
+    //borrowing styles from walkthrough to understand how they work
     styles = {
-        //TODO: add CSS styles
-    }
+        list: {
+            width: "200px",
+            padding: "0px 15px 0px",
+            listStyle: "none"
+        },
+
+        listItem: {
+            margin: "10px 10px 10px"
+        },
+        listLink: {
+            background: "transparent",
+            border: "none",
+            color: "black"
+        },
+        filter: {
+            width: "100%",
+            border: ".5px solid blue",
+            //padding: "3px",
+            //margin: "30px 0px 10px",
+            
+        }
+    };
     
     updateQuery = () => {
         //TODO: 
@@ -31,13 +51,21 @@ class LocationsDrawer extends Component {
                 >
                     <div>
                         <input
-                            
+                            style={this.styles.filter}
                         >
                             {}
                         </input>
-                        <ul>
-
-                            <button>{'render one button'}</button>
+                        <ul style={this.styles.list}>
+                            {/* Used buttons here for accessibility purposes, for better tabbing*/}
+                            {this.props.locations.map(
+                                (location, index) => {
+                                    return(
+                                        <li>
+                                            <button key={index} style={this.styles.listLink}>{location.name}</button>
+                                        </li>
+                                    )
+                                })
+                            }
 
                         </ul>
                     </div>
