@@ -4,13 +4,15 @@ import MapContainer from './components/MapContainer'
 import locations from './data/locations.json'
 import LocationsDrawer from './components/LocationsDrawer'
 
+
 class App extends Component {
   state = {
     all: locations,
     lat: 40.117243, 
     lng: -88.240827,
     zoom: 16,
-    drawerOpen: true
+    drawerOpen: true,
+    query: ''
   }
 
   styles = {
@@ -46,7 +48,7 @@ class App extends Component {
           locations={this.state.all}
           open={this.state.drawerOpen}
           handleDrawerOpen={this.handleDrawerOpen}
-          //to pass in the filtered locations
+          query={this.state.query}
         />
       </div>
     );

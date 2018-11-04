@@ -7,8 +7,8 @@ import sortBy from 'sort-by'
 
 class LocationsDrawer extends Component {
     state = {
-        // set initial state of user query
-        query: '' 
+        // TODO, check to see if you still need to set initial state of user query
+        
     }
     
     // Drawer list styles
@@ -34,7 +34,7 @@ class LocationsDrawer extends Component {
             color: "black"
         }
     };
-    
+
     //  query that user types in to filter restaurants
     updateQuery = (userRestaurantQuery) => {
         this.setState({query: userRestaurantQuery});
@@ -54,7 +54,7 @@ class LocationsDrawer extends Component {
         }
 
         showingRestaurants.sort(sortBy('name'))
-
+        
         return (
             // Credit: Followed Doug Brown's organization here with using the Drawer component and the button because as 
             // I reviewed the API, this ordering made the most sense for a responsive, highly accessible design.
