@@ -1,4 +1,5 @@
 ##FoodFinder App ReadME
+
 This FoodFinder app is the capstone project for the Udacity Frontend Nanodegree course. 
 
 There was no starter template for this project, but it was was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -16,7 +17,7 @@ It uses HTML, CSS, JS, React, JSX, APIs, and implements service workers to work 
 ## Pull Requests
 This is a graded project, so I will not accept pull requests prior to late-November 2018. 
 
-## Original Create-React-App documnetation
+## Original Create-React-App documentation
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md).
 

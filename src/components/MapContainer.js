@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 // bootstrapped this app with google-maps-react and now importing necessary items from this API
 import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
-import { linkSync } from 'fs';
 
 // set the API key here to use later and change easier if needed
 const API_KEY = 'AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8';
@@ -72,51 +71,53 @@ class MapContainer extends Component {
       method: 'GET',
       headers
     });
-    let selectedMarkerProps; 
-    // fetch FourSquare data from API for a restaurant using previously declared request
-    // fetch(request)
-    //   .then(response => response.json())
-    //   .then(result => {
-    //     // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to selectedMarkerProps array
-    //     let restaurant = this.findBusinessMatch(markerProps, result);
-    //     selectedMarkerProps = {
-    //       ...markerProps,
-    //       fsRestaurant: restaurant[0]
-    //     };
+    let fsProps = {}; 
+    //fetch FourSquare data from API for a restaurant using previously declared request
+    fetch(request)
+      .then(response => response.json())
+      .then(result => {
+        // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to fsprops object
+        let restaurant = this.findBusinessMatch(markerProps, result);
+        fsProps.fsRestaurant = restaurant[0];
 
-    //   //if a restaurant matched, get its hours from foursquare
-    //   if (selectedMarkerProps.fsRestaurant) {
-    //     let venueId = selectedMarkerProps.fsRestaurant.id; 
-    //     let headers = new Headers();
-    //     let url = `https://api.foursquare.com/v2/venues/${venueId}/hours?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}`;
-    //     let request = new Request(url, {
-    //       method: 'GET',
-    //       headers
-    //     });
-    //     fetch(request)
-    //       .then(response => response.json())
-    //       .then(result => {
-    //         console.log(result);
-    //         //TODO: confirm this is working when back online
-    //         //if restaurant the result returns the hours object then we filter the timeframes
-    //         // for those that include today. We set the variable to reflect whether it is open
-    //         if (result.response.hours) {
-    //           let today = result.response.hours.timeframes.filter(item => (item.includesToday));
-    //           selectedMarkerProps = {
-    //             ...selectedMarkerProps,
-    //             isOpenToday: today.length > 0 ? 'Open today' : 'Closed today'
-    //           }
-    //         }
-    //         else {
-    //           //else to capture those that there is no data about whether they are open
-    //           selectedMarkerProps = {
-    //             ...selectedMarkerProps,
-    //             isOpenToday: 'Unknown if restaurant is open today'
-    //           }
-    //         }
-    //       })   
-    //   }
-    // });
+      //if a restaurant matched, get its hours from foursquare
+      if (false) {
+      //if (fsProps.fsRestaurant) {
+        // builing the fs request
+        let venueId = fsProps.fsRestaurant.id; 
+        let headers = new Headers();
+        let url = `https://api.foursquare.com/v2/venues/${venueId}/hours?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}`;
+        let request = new Request(url, {
+          method: 'GET',
+          headers
+        });
+        // fetch the fs hours request
+        fetch(request)
+          .then(response => response.json())
+          .then(result => {
+            console.log('HOURS WERE FETCHED');
+            //if fs result returns the hours object and timeframes object then we filter the timeframes
+            // for those that include today. We set the variable to reflect whether it is open
+            if (result.response.hours && result.response.hours.timeframes) {
+              let today = result.response.hours.timeframes.filter(item => (item.includesToday));
+              fsProps.isOpenToday = today.length > 0 ? 'Open today' : 'Closed today';
+            }
+            else {
+              //else to capture those that there is no data about whether they are open
+              fsProps.isOpenToday= 'Unknown if restaurant is open today';
+            }
+          })
+          .then(() => {
+            markerProps = {
+              ...markerProps, ...fsProps
+            }
+            console.log('MARKER PROPS RIGHT AFTER FS STUFF'); console.log(markerProps);
+            this.setState({
+              selectedMarkerProps: markerProps,
+            });
+          });
+      }
+    });
 
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
     // credit: for next line of code, with my own modification for second bounce 
@@ -128,7 +129,7 @@ class MapContainer extends Component {
       selectedMarkerProps: markerProps,
       showingInfoWindow: true
   });
-  console.log(this.state.selectedMarker, this.state.selectedMarkerProps);
+  console.log(markerProps);
   }
   // update the marker from the null state to the locations from data
   resetMarkers(locations) {
@@ -177,6 +178,7 @@ class MapContainer extends Component {
       height: '100%'
     }
 
+    // Credit: Charles Kline for explaining JSX fragment to eliminate errors
     return (
       <Map
         aria-label='map'
@@ -193,17 +195,19 @@ class MapContainer extends Component {
           onClose={this.state.hideInfoWindow}
         >
           <div>
-            <h3>{this.state.selectedMarkerProps && this.state.selectedMarkerProps.restaurantName}</h3>
-            <p>
-              Best known for: 
-              {
-                this.state.selectedMarkerProps && 
-                this.state.selectedMarkerProps.bestKnownFor
-              }
-            </p>
-            <p>
-              {this.props.isOpenToday}
-            </p>
+            {this.state.selectedMarkerProps &&
+              <>
+                <h3>{this.state.selectedMarkerProps.restaurantName}</h3>
+                <p>
+                  Best known for: 
+                  {this.state.selectedMarkerProps.bestKnownFor}
+                </p>
+                <p>
+                  {this.state.selectedMarkerProps.isOpenToday}
+                </p>
+              </>
+            }
+            {!this.state.selectedMarkerProps && <p>Waiting for results...</p>}
           </div>
         </InfoWindow>
       </Map>
