@@ -38,9 +38,15 @@ class MapContainer extends Component {
 
     // If there is a selected item in the listDrawer, close the list drawer and activate the onMarkerClick for that selected item
     if (this.props.selectedRestaurant) {
-      let filteredMarkers = this.state.markerProps.filter(marker => marker.restaurantName === this.props.selectedRestaurant); 
-        console.log(filteredMarkers);
-        //this.onMarkerClick(filteredMarkers, //missing a parameter for marker here// , null);
+      let filteredMarkerProps = this.state.markerProps.filter(markerProp => markerProp.restaurantName === this.props.selectedRestaurant); 
+      let filteredMarkers = this.state.markers.filter(markers => markers.restaurantName === filteredMarkerProps[0].restaurantName);
+      console.log(filteredMarkerProps)
+      this.setState({
+        markerProps: filteredMarkerProps,
+        markers: filteredMarkers
+      })
+      console.log(this.state.markerProps, this.state.markers)
+      this.onMarkerClick(filteredMarkerProps[0], filteredMarkers , null);
       }  
   }
 
@@ -172,6 +178,7 @@ class MapContainer extends Component {
       let marker = new this.props.google.maps.Marker({
         map: this.state.map,
         position: location.pos,
+        restaurantName: location.name
       });
 
       marker.addListener('click', () => {
