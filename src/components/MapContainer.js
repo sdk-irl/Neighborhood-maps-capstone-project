@@ -30,6 +30,12 @@ class MapContainer extends Component {
     //  console.log('ERROR!! \nFailed to get Google maps.')
    }
 
+  componentDidUpdate() {
+    if (this.state.markers.length !== this.props.locations.length) {
+      this.resetMarkers(this.props.locations);
+      }
+    }
+
   // when the map is loaded, set the state and fetch the places
   fetchPlaces = (mapProps, map) => {
     this.setState({map});

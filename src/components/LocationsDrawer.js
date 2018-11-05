@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 // Selected material-ui drawer (https://material-ui.com/demos/drawers/ Doug Brown also uses 
 // this in walkthrough) after looking at several less functional and less well-designed drawer libraries
 import Drawer from '@material-ui/core/Drawer'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
 
 class LocationsDrawer extends Component {
     state = {
@@ -35,26 +33,7 @@ class LocationsDrawer extends Component {
         }
     };
 
-    //  query that user types in to filter restaurants
-    updateQuery = (userRestaurantQuery) => {
-        this.setState({query: userRestaurantQuery});
-    }
-    
-    // Credit: Helped by code and regex explanation from Udacity controlled components video 
-    // (https://www.youtube.com/watch?v=xIlkBGmRq0g)
-    render = () => {
-        let showingRestaurants
-        if (this.state.query) {
-            const match = new RegExp(escapeRegExp(this.state.query), 'i')
-            showingRestaurants = this.props.locations.filter(
-                (location) => match.test(location.name)
-            )
-        } else {
-            showingRestaurants = this.props.locations
-        }
-
-        showingRestaurants.sort(sortBy('name'))
-        
+    render = () => {        
         return (
             // Credit: Followed Doug Brown's organization here with using the Drawer component and the button because as 
             // I reviewed the API, this ordering made the most sense for a responsive, highly accessible design.
@@ -74,14 +53,14 @@ class LocationsDrawer extends Component {
                             placeholder='Search restaurants'
                             onChange={
                                 (e) => {
-                                    this.updateQuery(e.target.value);
+                                    this.props.updateQuery(e.target.value);
                                 }
                             }
                         >
                         </input>
                         <ul style={this.styles.list}>
                             {/* Used buttons here for accessibility purposes, for better tabbing*/}
-                            {showingRestaurants.map(
+                            {this.props.showingRestaurants.map(
                                 (location, index) => {
                                     return(
                                         <li key={index}>
