@@ -40,7 +40,7 @@ class MapContainer extends Component {
     if (this.props.selectedRestaurant) {
       let filteredMarkers = this.state.markerProps.filter(marker => marker.restaurantName === this.props.selectedRestaurant); 
         console.log(filteredMarkers);
-        //this.onMarkerClick(filteredMarkers, , null);
+        //this.onMarkerClick(filteredMarkers, //missing a parameter for marker here// , null);
       }  
   }
 
