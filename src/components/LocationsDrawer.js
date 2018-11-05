@@ -22,10 +22,6 @@ class LocationsDrawer extends Component {
             padding: "0px 15px 0px",
             listStyle: "none"
         },
-
-        listItem: {
-            margin: "10px 10px 10px"
-        },
         listLink: {
             background: "transparent",
             border: "none",
@@ -64,7 +60,7 @@ class LocationsDrawer extends Component {
                                 (location, index) => {
                                     return(
                                         <li key={index}>
-                                            <button style={this.styles.listLink}>{location.name}</button>
+                                            <button key={index} onClick={this.props.onListItemClick} style={this.styles.listLink}>{location.name}</button>
                                         </li>
                                     )
                                 })

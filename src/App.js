@@ -6,7 +6,6 @@ import LocationsDrawer from './components/LocationsDrawer'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
-
 class App extends Component {
   state = {
     all: locations,
@@ -15,7 +14,8 @@ class App extends Component {
     zoom: 16,
     drawerOpen: true,
     query: '',
-    showingRestaurants: locations
+    showingRestaurants: locations,
+    selectedRestaurant: ''
   }
 
   styles = {
@@ -35,22 +35,34 @@ class App extends Component {
     });
   };
 
-      //  query that user types in to filter restaurants
-    updateQuery = (userRestaurantQuery) => {
-      let showingRestaurants;
-      // Credit: Helped by code and regex explanation from Udacity controlled components video 
-      // (https://www.youtube.com/watch?v=xIlkBGmRq0g)
-      if (userRestaurantQuery) {
-          const match = new RegExp(escapeRegExp(userRestaurantQuery), 'i')
-          showingRestaurants = locations.filter(
-              (location) => match.test(location.name)
-          )
-      } else {
-          showingRestaurants = locations
-      }
-      showingRestaurants.sort(sortBy('name'))
-      this.setState({query: userRestaurantQuery, showingRestaurants});
+    //  query that user types in to filter restaurants
+  updateQuery = (userRestaurantQuery) => {
+    let showingRestaurants;
+    // Credit: Helped by code and regex explanation from Udacity controlled components video 
+    // (https://www.youtube.com/watch?v=xIlkBGmRq0g)
+    if (userRestaurantQuery) {
+        const match = new RegExp(escapeRegExp(userRestaurantQuery), 'i')
+        showingRestaurants = locations.filter(
+            (location) => match.test(location.name)
+        )
+    } else {
+        showingRestaurants = locations
     }
+    showingRestaurants.sort(sortBy('name'))
+    this.setState({
+      query: userRestaurantQuery, 
+      showingRestaurants
+    });
+  }
+
+  // when an item is clicked in the locations drawer, this fires
+  // we take the onClick event target, the button, and set the state to reflect selected location
+  onListItemClick = (e) => {
+    let selectedRestaurant=e.target.innerText; 
+    this.setState({
+      selectedRestaurant: selectedRestaurant
+     })
+}
 
   render() {
     return (
@@ -63,6 +75,8 @@ class App extends Component {
           lat={this.state.lat}
           lng={this.state.lng}
           zoom={this.state.zoom}
+          selectedIndex={this.state.selectedIndex}
+          selectedRestaurant={this.state.selectedRestaurant}
         />
         <LocationsDrawer
           open={this.state.drawerOpen}
@@ -70,6 +84,7 @@ class App extends Component {
           query={this.state.query}
           updateQuery={this.updateQuery}
           showingRestaurants={this.state.showingRestaurants}
+          onListItemClick={this.onListItemClick}
         />
       </div>
     );

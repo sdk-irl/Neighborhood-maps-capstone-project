@@ -28,13 +28,21 @@ class MapContainer extends Component {
     //window.gm_authFailure = () => {
     //  alert('ERROR!! \nFailed to get Google maps.')
     //  console.log('ERROR!! \nFailed to get Google maps.')
-   }
+  }
 
   componentDidUpdate() {
+    // If there is a change in the number of items in the list drawer, update the markers to reflect that
     if (this.state.markers.length !== this.props.locations.length) {
       this.resetMarkers(this.props.locations);
-      }
     }
+
+    // If there is a selected item in the listDrawer, close the list drawer and activate the onMarkerClick for that selected item
+    if (this.props.selectedRestaurant) {
+      let filteredMarkers = this.state.markerProps.filter(marker => marker.restaurantName === this.props.selectedRestaurant); 
+        console.log(filteredMarkers);
+        //this.onMarkerClick(filteredMarkers, , null);
+      }  
+  }
 
   // when the map is loaded, set the state and fetch the places
   fetchPlaces = (mapProps, map) => {
