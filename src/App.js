@@ -6,6 +6,7 @@ import LocationsDrawer from './components/LocationsDrawer'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
+// APP COMPONENT THAT RENDERS MAP CONTAINER AND LOCATIONS DRAWER
 class App extends Component {
   state = {
     all: locations,
@@ -27,7 +28,7 @@ class App extends Component {
     },
 
   }
-
+  // LOCATIONS DRAWER STATE KEPT IN APP.JS COMPONENT FOR USE ELSEWHERE
   // open or shut the LocationsDrawer (help from demos listed here: https://material-ui.com/demos/drawers/)
   handleDrawerOpen = () => {
     this.setState({
@@ -35,7 +36,7 @@ class App extends Component {
     });
   };
 
-    //  query that user types in to filter restaurants
+  //  query that user types in to filter restaurants
   updateQuery = (userRestaurantQuery) => {
     let showingRestaurants;
     // Credit: Helped by code and regex explanation from Udacity controlled components video 
@@ -58,10 +59,11 @@ class App extends Component {
   // when an item is clicked in the locations drawer, this fires
   // we take the onClick event target, the button, and set the state to reflect selected location
   onListItemClick = (e) => {
-    let selectedRestaurant=e.target.innerText; 
+    let selectedRestaurant=e.target.innerText;
+    console.log(selectedRestaurant); 
     this.setState({
-      selectedRestaurant: selectedRestaurant
-     })
+     selectedRestaurant: selectedRestaurant
+    })
 }
 
   render() {

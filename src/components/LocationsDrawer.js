@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 // this in walkthrough) after looking at several less functional and less well-designed drawer libraries
 import Drawer from '@material-ui/core/Drawer'
 
+// LOCATIONSDRAWER COMPONENT THAT RENDERS IMPORTED DRAWER COMPONENT
 class LocationsDrawer extends Component {
     state = {
         // TODO, check to see if you still need to set initial state of user query
@@ -60,7 +61,11 @@ class LocationsDrawer extends Component {
                                 (location, index) => {
                                     return(
                                         <li key={index}>
-                                            <button key={index} onClick={this.props.onListItemClick} style={this.styles.listLink}>{location.name}</button>
+                                            <button 
+                                                key={index} 
+                                                onClick={this.props.onListItemClick} 
+                                                style={this.styles.listLink}
+                                            >{location.name}</button>
                                         </li>
                                     )
                                 })
