@@ -38,16 +38,16 @@ class MapContainer extends Component {
 
     // If there is a selected item in the listDrawer, close the list drawer and activate the onMarkerClick for that selected item
     if (this.props.selectedRestaurant) {
-      let filteredMarkerProps = this.state.markerProps.filter(markerProp => markerProp.restaurantName === this.props.selectedRestaurant); 
-      let filteredMarkers = this.state.markers.filter(markers => markers.restaurantName === filteredMarkerProps[0].restaurantName);
-      console.log(filteredMarkerProps)
+      let filteredMarkerProp = this.state.markerProps.filter(thisMarkerProp => thisMarkerProp.restaurantName === this.props.selectedRestaurant); 
+      let filteredMarker = this.state.markers.filter(thisMarker => thisMarker.restaurantName === filteredMarkerProp[0].restaurantName);
+      console.log(filteredMarker);
       this.setState({
-        markerProps: filteredMarkerProps,
-        markers: filteredMarkers
+        markerProps: filteredMarkerProp,
+        markers: filteredMarker
       })
-      console.log(this.state.markerProps, this.state.markers)
-      this.onMarkerClick(filteredMarkerProps[0], filteredMarkers , null);
-      }  
+      //could not use marker state here because it hadn't set yet
+      this.onMarkerClick(filteredMarkerProp[0], filteredMarker , null)
+    }  
   }
 
   // when the map is loaded, set the state and fetch the places
@@ -101,9 +101,10 @@ class MapContainer extends Component {
         fsProps.fsRestaurant = restaurant[0];
 
       //if a restaurant matched, get its hours from foursquare
+      //this is functional--it is unused to prevent from overfetching with the API key
       if (false) {
       //if (fsProps.fsRestaurant) {
-        // builing the fs request
+        // building the fs request
         let venueId = fsProps.fsRestaurant.id; 
         let headers = new Headers();
         let url = `https://api.foursquare.com/v2/venues/${venueId}/hours?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}`;
@@ -142,20 +143,21 @@ class MapContainer extends Component {
     marker.setAnimation(window.google.maps.Animation.BOUNCE);
     // credit: for next line of code, with my own modification for second bounce 
     // https://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
-    setTimeout(function(){ marker.setAnimation(null); }, 1400);
+    setTimeout(() => { marker.setAnimation(null); }, 1400);
+    
     // set the state to show marker info (google maps react documentation https://www.npmjs.com/package/google-maps-react) 
     this.setState({
       selectedMarker: marker,
       selectedMarkerProps: markerProps,
       showingInfoWindow: true
-  });
-  console.log(markerProps);
+    });
   }
   // update the marker from the null state to the locations from data
   resetMarkers(locations) {
-    // if no locations exist or they've all been filtered, we're done--credit: https://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
+    // if no locations exist or they've all been filtered, return without resetting--credit: https://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
     if (!locations) 
       return;
+    console.log(locations);
     
     // remove any existing markers
     this.state.markers.forEach(marker => marker.setMap(null));
