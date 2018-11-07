@@ -26,30 +26,31 @@ class MapContainer extends Component {
     // listening for authentication failures from Google maps
     window.gm_authFailure = () => {
      alert('Failed to obtain Google Maps.')
-  }
-}
-
-  // when the map updates, this function runs
-  componentDidUpdate() {
-    // If there is a change in the number of items in the list drawer, update the markers to reflect that
-    if (this.state.markers.length !== this.props.locations.length) {
-      this.resetMarkers(this.props.locations);
-      this.setState({selectedMarker: null});
-      return;
     }
+  }
 
+  // Used componentWillUpdate here, spent several days debugging; I realize this will be deprecated soon, so any suggestions are welcome
+  componentWillReceiveProps = (props) => {
+    this.setState({firstDrop: false});
+    // If there's a change in the number of locations, update the markers
+    if (this.state.markers.length !== this.props.locations.length) {
+        this.resetMarkers(this.props.locations);
+        this.setState({selectedMarker: null});
+        this.hideInfoWindow();
+        return;
+    }
     // If there is a selected item in the listDrawer, filter the markers on the page, then activate the onMarkerClick for that selected item
     if (this.props.selectedRestaurant) {
-      //filter markers on the page
-      let filteredMarkerProp = this.state.markerProps.filter(thisMarkerProp => thisMarkerProp.restaurantName === this.props.selectedRestaurant); 
-      // let filteredMarker = this.state.markers.filter(thisMarker => thisMarker.restaurantName === filteredMarkerProp[0].restaurantName);
-      // console.log(filteredMarker);
-      // this.setState({
-      //   markerProps: filteredMarkerProp,
-      //   markers: filteredMarker
-      // })
-      // //could not use marker state here because it hadn't set yet
-      // this.onMarkerClick(filteredMarkerProp[0], filteredMarker , null)
+    //filter markers on the page
+    let filteredMarkerProp = this.state.markerProps.filter(thisMarkerProp => thisMarkerProp.restaurantName === this.props.selectedRestaurant); 
+    let filteredMarker = this.state.markers.filter(thisMarker => thisMarker.restaurantName === filteredMarkerProp[0].restaurantName);
+    console.log(filteredMarker);
+    this.setState({
+      markerProps: filteredMarkerProp,
+      markers: filteredMarker
+    })
+    //could not use marker state here because it hadn't set yet
+    this.onMarkerClick(filteredMarkerProp[0], filteredMarker[0] , null)
     }  
   }
 
