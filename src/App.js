@@ -62,7 +62,8 @@ class App extends Component {
     let selectedRestaurant=e.target.innerText;
     console.log(selectedRestaurant); 
     this.setState({
-     selectedRestaurant: selectedRestaurant
+     selectedRestaurant: selectedRestaurant,
+     //drawerOpen: false
     })
 }
 

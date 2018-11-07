@@ -51,7 +51,8 @@ class MapContainer extends Component {
     })
     //could not use marker state here because it hadn't set yet
     this.onMarkerClick(filteredMarkerProp[0], filteredMarker[0] , null)
-    }  
+    }
+    return;
   }
 
   // when the map is loaded, set the map state and reset the markers
