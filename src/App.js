@@ -65,7 +65,7 @@ class App extends Component {
      selectedRestaurant: selectedRestaurant,
      //drawerOpen: false
     })
-}
+  }
 
   render() {
     return (

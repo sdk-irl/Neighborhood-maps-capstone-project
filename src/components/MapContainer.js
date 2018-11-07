@@ -32,13 +32,17 @@ class MapContainer extends Component {
   // Used componentWillUpdate here, spent several days debugging; I realize this will be deprecated soon, so any suggestions are welcome
   componentWillReceiveProps = (props) => {
     this.setState({firstDrop: false});
-    // If there's a change in the number of locations, update the markers
+    // If there's a change in the number of locations in the list, update the markers
+    //debugger;
     if (this.state.markers.length !== this.props.locations.length) {
         this.resetMarkers(this.props.locations);
         this.setState({selectedMarker: null});
         this.hideInfoWindow();
-        return;
     }
+
+    if (this.props.selectedRestaurant === null || typeof(this.props.selectedRestaurant) === "undefined") {
+      return;
+    };
     // If there is a selected item in the listDrawer, filter the markers on the page, then activate the onMarkerClick for that selected item
     if (this.props.selectedRestaurant) {
     //filter markers on the page
@@ -49,10 +53,9 @@ class MapContainer extends Component {
       markerProps: filteredMarkerProp,
       markers: filteredMarker
     })
-    //could not use marker state here because it hadn't set yet
+    // Act as if the marker has been clicked (note: could not use marker state here because it hadn't set yet)
     this.onMarkerClick(filteredMarkerProp[0], filteredMarker[0] , null)
     }
-    return;
   }
 
   // when the map is loaded, set the map state and reset the markers
@@ -106,8 +109,8 @@ class MapContainer extends Component {
 
       //if a restaurant matched, get its hours from foursquare
       //this is functional--it is unused to prevent from overfetching with the API key
-      if (false) {
-      //if (fsProps.fsRestaurant) {
+      // if (false) {
+      if (fsProps.fsRestaurant) {
         // building the fs request
         let venueId = fsProps.fsRestaurant.id; 
         let headers = new Headers();
@@ -136,7 +139,6 @@ class MapContainer extends Component {
             markerProps = {
               ...markerProps, ...fsProps
             }
-            console.log('MARKER PROPS RIGHT AFTER FS STUFF'); console.log(markerProps);
             this.setState({
               selectedMarkerProps: markerProps,
             });
