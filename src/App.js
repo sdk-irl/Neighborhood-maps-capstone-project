@@ -1,71 +1,63 @@
-import React, { Component } from 'react'
-import './App.css'
-import MapContainer from './components/MapContainer'
-import locations from './data/locations.json'
-import LocationsDrawer from './components/LocationsDrawer'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
+import React, { Component } from "react";
+import "./App.css";
+import MapContainer from "./components/MapContainer";
+import locations from "./data/locations.json";
+import LocationsDrawer from "./components/LocationsDrawer";
+import escapeRegExp from "escape-string-regexp";
+import sortBy from "sort-by";
 
 // APP COMPONENT THAT RENDERS MAP CONTAINER AND LOCATIONS DRAWER
 class App extends Component {
   state = {
     all: locations,
-    lat: 40.117243, 
+    lat: 40.117243,
     lng: -88.240827,
     zoom: 16,
     drawerOpen: true,
-    query: '',
+    query: "",
     showingRestaurants: locations,
-    selectedRestaurant: ''
-  }
+    selectedRestaurant: ""
+  };
 
   styles = {
     menuButton: {
-        //TODO
+      //TODO
     },
     hide: {
-      display: 'none'
-    },
-
-  }
-  // LOCATIONS DRAWER STATE KEPT IN APP.JS COMPONENT FOR USE ELSEWHERE
-  // open or shut the LocationsDrawer (help from demos listed here: https://material-ui.com/demos/drawers/)
-  handleDrawerOpen = () => {
-    this.setState({
-      drawerOpen: !this.state.drawerOpen
-    });
+      display: "none"
+    }
   };
 
   //  query that user types in to filter restaurants
-  updateQuery = (userRestaurantQuery) => {
+  updateQuery = userRestaurantQuery => {
     let showingRestaurants;
-    // Credit: Helped by code and regex explanation from Udacity controlled components video 
+    // Credit: Helped by code and regex explanation from Udacity controlled components video
     // (https://www.youtube.com/watch?v=xIlkBGmRq0g)
     if (userRestaurantQuery) {
-        const match = new RegExp(escapeRegExp(userRestaurantQuery), 'i')
-        showingRestaurants = locations.filter(
-            (location) => match.test(location.name)
-        )
+      const match = new RegExp(escapeRegExp(userRestaurantQuery), "i");
+      showingRestaurants = locations.filter(location =>
+        match.test(location.name)
+      );
     } else {
-        showingRestaurants = locations
+      showingRestaurants = locations;
     }
-    showingRestaurants.sort(sortBy('name'))
+    showingRestaurants.sort(sortBy("name"));
     this.setState({
-      query: userRestaurantQuery, 
+      query: userRestaurantQuery,
       showingRestaurants
     });
-  }
+  };
 
   // when an item is clicked in the locations drawer, this fires
   // we take the onClick event target, the button, and set the state to reflect selected location
-  onListItemClick = (e) => {
-    let selectedRestaurant=e.target.innerText;
-    console.log(selectedRestaurant); 
+  onListItemClick = e => {
+    let selectedRestaurant = e.target.innerText;
+    console.log(selectedRestaurant);
     this.setState({
-     selectedRestaurant: selectedRestaurant,
-     //drawerOpen: false
-    })
-  }
+      selectedRestaurant: selectedRestaurant
+      //drawerOpen: false
+    });
+  };
 
   render() {
     return (
@@ -83,7 +75,6 @@ class App extends Component {
         />
         <LocationsDrawer
           open={this.state.drawerOpen}
-          handleDrawerOpen={this.handleDrawerOpen}
           query={this.state.query}
           updateQuery={this.updateQuery}
           showingRestaurants={this.state.showingRestaurants}
@@ -94,4 +85,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default App;
