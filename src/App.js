@@ -54,7 +54,6 @@ class App extends Component {
     let selectedRestaurant = e.target.innerText;
     this.setState({
       selectedRestaurant: selectedRestaurant
-      //drawerOpen: false
     });
   };
 
@@ -80,6 +79,7 @@ class App extends Component {
           updateQuery={this.updateQuery}
           showingRestaurants={this.state.showingRestaurants}
           onListItemClick={this.onListItemClick}
+          selectedRestaurant={this.state.selectedRestaurant}
         />
       </div>
     );

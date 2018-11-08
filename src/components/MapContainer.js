@@ -84,6 +84,12 @@ class MapContainer extends Component {
     let fsProps = {};
     //fetch FourSquare data from API for a restaurant using previously declared request
     fetch(request)
+      .then(response => {
+        if(!response.ok) {
+          throw new Error('response not ok');
+        }
+        return response;
+      })
       .then(response => response.json())
       .then(result => {
         // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to fsprops object
@@ -103,7 +109,14 @@ class MapContainer extends Component {
             headers
           });
           // fetch the fs hours request
+          // information about throw https://www.tjvantoll.com/2015/09/13/fetch-and-errors/
           fetch(request)
+            .then(response => {
+              if(!response.ok ) {
+              throw new Error('response not ok');
+            }
+            return response;
+          })
             .then(response => response.json())
             .then(result => {
               //if fs result returns the hours object and timeframes object then we filter the timeframes
@@ -127,14 +140,22 @@ class MapContainer extends Component {
               this.setState(
                 {
                   selectedMarkerProps: marker,
-                },
-                () => {
-                  console.log(marker);
                 }
               );
-            });
+            })  
+            .catch(error => {
+                // if data is not returned from FourSquare, say so
+                marker.isOpenToday = "Open/closed data not available";
+                this.setState({selectedMarkerProps: marker});
+            })
         }
-      });
+      })
+      .catch(error => {
+        // if data is not returned from FourSquare, say so
+        marker.isOpenToday = "Open/closed data not available";
+        this.setState({selectedMarkerProps: marker});
+      })
+
   }
 
   onMarkerClick = (markerProps, marker, e) => {
@@ -192,17 +213,17 @@ class MapContainer extends Component {
     this.setState({ markers, markerProps });
   }
 
-  componentWillReceiveProps = (props) => {
+  componentWillReceiveProps = (nextProps) => {
     // restaurants properties are displayed when list item is clicked by matching the selected 
     // restaurant property from the App component to the restaurant name of the marker
     // Also recalls the FS data function to display that on the window
     this.state.markers.forEach(marker => {
-      if (props.selectedRestaurant === marker.restaurantName) {
+      if (nextProps.selectedRestaurant === marker.restaurantName) {
         this.setState(
           {selectedMarker: marker},
           () => {
             this.state.markerProps.forEach(markerProp => {
-              if (props.selectedRestaurant === markerProp.restaurantName) {
+              if (nextProps.selectedRestaurant === markerProp.restaurantName) {
                 this.setState({
                   selectedMarkerProps: markerProp,
                   showingInfoWindow: true,
@@ -221,21 +242,14 @@ class MapContainer extends Component {
         }, 1400);
       }
     });
-  };
-
-  componentDidUpdate = () => {
     // If there's a change in the number of locations in the list, update the markers
-    this.setState(
-      () => {
-        if (this.props.locations.length !== this.state.markers.length) 
-        {
-          this.resetMarkers(this.props.locations);
-          this.setState({ selectedMarker: null });
-          this.hideInfoWindow();
-        }
-      }
-    )
-  }
+
+    if (nextProps.locations.length !== this.state.markers.length) {
+      this.resetMarkers(nextProps.locations);
+      this.setState(() => ({ selectedMarker: null }));
+      this.hideInfoWindow();
+    }
+  };
 
   render() {
     let mapCenter = {

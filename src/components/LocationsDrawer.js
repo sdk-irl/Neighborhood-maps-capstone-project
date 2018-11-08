@@ -61,10 +61,14 @@ class LocationsDrawer extends Component {
               />
               <ul style={this.styles.list}>
                 {this.props.showingRestaurants.map((location, index) => {
+                  const selectedName = this.props.selectedRestaurant;
+                  const isPressed = selectedName && selectedName === location.name;
                   return (
                     <li key={index}>
                       <button
                         key={index}
+                        aria-labelledby={location.name}
+                        aria-pressed={isPressed ? "true" : "false"}
                         onClick={this.props.onListItemClick}
                         style={this.styles.listLink}>
                         {location.name}

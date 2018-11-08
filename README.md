@@ -12,6 +12,11 @@ It uses HTML, CSS, JS, React, JSX, and APIs. It also implements service workers 
 2. Run npm install
 3. Run npm start
 
+To run in production:
+1. npm run serve
+2. serve -s build
+3. And then visit localhost:5000
+
 Again, this app will work offline in production build but not on a local server.
 
 ## APIs and libraries in use
