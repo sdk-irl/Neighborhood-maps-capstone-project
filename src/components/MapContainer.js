@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // bootstrapped this app with google-maps-react and now importing necessary items from this API
 import { Map, InfoWindow, GoogleApiWrapper } from "google-maps-react";
+import OfflineMapContainer from "./OfflineMapContainer";
 
 // set the API key here to use later and change easier if needed
 const API_KEY = "AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8";
@@ -18,7 +19,7 @@ class MapContainer extends Component {
     selectedMarker: null,
     markerProps: [],
     selectedMarkerProps: null,
-    showingInfoWindow: false
+    showingInfoWindow: false,
   };
 
   // when the map is loaded, this function runs
@@ -29,42 +30,13 @@ class MapContainer extends Component {
     };
   }
 
-  // Used componentWillUpdate here, spent several days debugging; I realize this will be deprecated soon, so any suggestions are welcome
   componentWillMount = () => {
-    console.log(this.state.markers);
     this.setState({ firstDrop: false });
-    // If there's a change in the number of locations in the list, update the markers
-    if (this.state.markers.length !== this.props.locations.length) {
-      this.resetMarkers(this.props.locations);
-      this.setState({ selectedMarker: null });
-      this.hideInfoWindow();
-    }
-
     if (
       this.props.selectedRestaurant === null ||
       typeof this.props.selectedRestaurant === "undefined"
     ) {
       return;
-    }
-    // If there is a selected item in the listDrawer, filter the markers on the page, then activate the onMarkerClick for that selected item
-    if (this.props.selectedRestaurant) {
-      //filter markers on the page
-      console.log(this.state.markerProps);
-      let filteredMarkerProp = this.state.markerProps.filter(
-        thisMarkerProp =>
-          thisMarkerProp.restaurantName === this.props.selectedRestaurant
-      );
-      let filteredMarker = this.state.markers.filter(
-        thisMarker =>
-          thisMarker.restaurantName === filteredMarkerProp[0].restaurantName
-      );
-      console.log(filteredMarker);
-      this.setState({
-        markerProps: filteredMarkerProp,
-        markers: filteredMarker
-      });
-      // Act as if the marker has been clicked (note: could not use marker state here because it hadn't set yet)
-      this.onMarkerClick(filteredMarkerProp[0], filteredMarker[0], null);
     }
   };
 
@@ -72,7 +44,6 @@ class MapContainer extends Component {
   onMapReady = (props, map) => {
     this.setState({ map });
     this.resetMarkers(this.props.locations);
-    console.log(this.state.markers);
   };
 
   // close the info window and make the active marker null when this is called (which is when the next marker is clicked)
@@ -98,14 +69,11 @@ class MapContainer extends Component {
     return BusinessMatch;
   };
 
-  onMarkerClick = (markerProps, marker, e) => {
-    // close any previous infoWindows before opening the next one
-    this.hideInfoWindow();
-
+  getFourSquareData = marker => {
     // variable declaring foursquare URL that embeds the client ID, secret, and version variables
     let FS_url = `https://api.foursquare.com/v2/venues/search?client_id=${FourSquare_CLIENT_ID}&client_secret=${FourSquare_SECRET}&v=${FourSquare_VERSION}&radius=250&ll=${
-      markerProps.position.lat
-    },${markerProps.position.lng}&limit=10`;
+      marker.position.lat
+    },${marker.position.lng}&limit=10`;
 
     let headers = new Headers();
     // variable declaring a new request that inputs the foursquare URL
@@ -119,12 +87,12 @@ class MapContainer extends Component {
       .then(response => response.json())
       .then(result => {
         // obtain the individual restaurant from FourSquare that matches the marker that was clicked and adds it to fsprops object
-        let restaurant = this.findBusinessMatch(markerProps, result);
+        let restaurant = this.findBusinessMatch(marker, result);
         fsProps.fsRestaurant = restaurant[0];
 
         //if a restaurant matched, get its hours from foursquare
         //this is functional--it is unused to prevent from overfetching with the API key
-        // if (false) {
+        //if (false) {
         if (fsProps.fsRestaurant) {
           // building the fs request
           let venueId = fsProps.fsRestaurant.id;
@@ -138,7 +106,6 @@ class MapContainer extends Component {
           fetch(request)
             .then(response => response.json())
             .then(result => {
-              console.log("HOURS WERE FETCHED");
               //if fs result returns the hours object and timeframes object then we filter the timeframes
               // for those that include today. We set the variable to reflect whether it is open
               if (result.response.hours && result.response.hours.timeframes) {
@@ -153,21 +120,28 @@ class MapContainer extends Component {
               }
             })
             .then(() => {
-              markerProps = {
-                ...markerProps,
+              marker = {
+                ...marker,
                 ...fsProps
               };
               this.setState(
                 {
-                  selectedMarkerProps: markerProps
+                  selectedMarkerProps: marker,
                 },
                 () => {
-                  console.log(this.state.markerProps);
+                  console.log(marker);
                 }
               );
             });
         }
       });
+  }
+
+  onMarkerClick = (markerProps, marker, e) => {
+    // close any previous infoWindows before opening the next one
+    this.hideInfoWindow();
+
+    this.getFourSquareData(markerProps);
 
     // set the state to show marker info (google maps react documentation https://www.npmjs.com/package/google-maps-react)
     this.setState({
@@ -176,6 +150,8 @@ class MapContainer extends Component {
       showingInfoWindow: true
     });
   };
+
+
   // update the marker from the null state to the locations from data
   resetMarkers(locations) {
     // if no locations exist or they've all been filtered, return without resetting--credit: https://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
@@ -198,25 +174,16 @@ class MapContainer extends Component {
       };
       markerProps.push(markerData);
 
-      // declaring new google maps marker (for each mapped location) to have the position of the location data
-      let animation = this.props.google.maps.Animation.BOUNCE;
-      // credit: for next line of code, with my own modification for second bounce
-      // https://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
-      setTimeout(() => {
-        marker.setAnimation(null);
-      }, 1400);
-
       let marker = new this.props.google.maps.Marker({
         map: this.state.map,
         position: location.pos,
         restaurantName: location.name,
-        animation: animation
+        animation: this.props.google.maps.Animation.DROP
       });
 
       // add event listener to marker
       marker.addListener("click", () => {
         this.onMarkerClick(markerData, marker, null);
-        //toggleBounce(marker);
       });
 
       return marker;
@@ -224,30 +191,53 @@ class MapContainer extends Component {
     this.setState({ markers, markerProps });
   }
 
-  componentWillReceiveProps = props => {
+  componentWillReceiveProps = (props) => {
+    // restaurants properties are displayed when list item is clicked by matching the selected 
+    // restaurant property from the App component to the restaurant name of the marker
+    // Also recalls the FS data function to display that on the window
     this.state.markers.forEach(marker => {
       if (props.selectedRestaurant === marker.restaurantName) {
         this.setState(
-          {
-            selectedMarker: marker
-          },
+          {selectedMarker: marker},
           () => {
             this.state.markerProps.forEach(markerProp => {
               if (props.selectedRestaurant === markerProp.restaurantName) {
                 this.setState({
                   selectedMarkerProps: markerProp,
-                  showingInfoWindow: true
+                  showingInfoWindow: true,
                 });
+                this.getFourSquareData(markerProp);
               }
             });
           }
         );
+        // Adds a bounce to the already displayed marker
+        marker.setAnimation(this.props.google.maps.Animation.BOUNCE);
+        // credit: for next line of code, with my own modification for second bounce
+        // https://stackoverflow.com/questions/7339200/bounce-a-pin-in-google-maps-once
+        setTimeout(() => {
+          marker.setAnimation(null);
+        }, 1400);
       }
     });
   };
 
+  componentDidUpdate = () => {
+    // If there's a change in the number of locations in the list, update the markers
+    this.setState(
+      () => {
+        if (this.props.locations.length !== this.state.markers.length) 
+        {
+          this.resetMarkers(this.props.locations);
+          this.setState({ selectedMarker: null });
+          this.hideInfoWindow();
+        }
+      }
+    )
+  }
+
+
   render() {
-    console.log(this.props.selectedRestaurant);
     let mapCenter = {
       lat: this.props.lat,
       lng: this.props.lng
@@ -276,7 +266,7 @@ class MapContainer extends Component {
               <>
                 <h3>{this.state.selectedMarkerProps.restaurantName}</h3>
                 <p>
-                  Best known for:
+                  Best known for: 
                   {this.state.selectedMarkerProps.bestKnownFor}
                 </p>
                 <p>{this.state.selectedMarkerProps.isOpenToday}</p>
@@ -291,5 +281,6 @@ class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: API_KEY
+  apiKey: API_KEY,
+  LoadingContainer: OfflineMapContainer
 })(MapContainer);

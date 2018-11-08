@@ -52,7 +52,6 @@ class App extends Component {
   // we take the onClick event target, the button, and set the state to reflect selected location
   onListItemClick = e => {
     let selectedRestaurant = e.target.innerText;
-    console.log(selectedRestaurant);
     this.setState({
       selectedRestaurant: selectedRestaurant
       //drawerOpen: false
@@ -63,7 +62,9 @@ class App extends Component {
     return (
       <div className="App">
         <div>
-          <h1 className="heading">FoodFinder</h1>
+          <h1 style={{
+            width: '100%',
+            textAlign: 'center'}}>FoodFinder</h1>
         </div>
         <MapContainer
           locations={this.state.showingRestaurants}

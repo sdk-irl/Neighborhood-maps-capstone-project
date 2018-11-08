@@ -20,7 +20,7 @@ class LocationsDrawer extends Component {
     },
     list: {
       width: "200px",
-      padding: "0px 15px 0px",
+      padding: "20px 15px 0px",
       listStyle: "none"
     },
     listLink: {
@@ -28,6 +28,7 @@ class LocationsDrawer extends Component {
       border: "none",
       color: "black"
     }
+    
   };
 
   handleDrawerClick = () => {
@@ -75,7 +76,12 @@ class LocationsDrawer extends Component {
               <input
                 type="button"
                 onClick={() => this.handleDrawerClick()}
-                value={this.state.drawerOpen ? "Hide Drawer" : "Show Drawer"}
+                value={this.state.drawerOpen ? "Hide Restaurants" : "Show Restaurants"}
+                style={{
+                  position: "fixed",
+                  top: "5em",
+                  left: "10px"
+                }}
               />
             </div>
           </Drawer>
@@ -85,10 +91,10 @@ class LocationsDrawer extends Component {
           onClick={() => this.handleDrawerClick()}
           style={{
             position: "fixed",
-            bottom: "10px",
+            top: "5em",
             left: "10px"
           }}
-          value={this.state.drawerOpen ? "Hide Drawer" : "Show Drawer"}
+          value={this.state.drawerOpen ? "Hide Restaurants" : "Show Restaurants"}
         />
       </div>
     );
