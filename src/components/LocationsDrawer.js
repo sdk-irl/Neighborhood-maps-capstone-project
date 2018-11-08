@@ -87,6 +87,7 @@ class LocationsDrawer extends Component {
           </Drawer>
         )}
         <input
+          tabIndex="0"
           type="button"
           onClick={() => this.handleDrawerClick()}
           style={{

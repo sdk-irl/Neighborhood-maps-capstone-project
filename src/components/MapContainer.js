@@ -151,10 +151,10 @@ class MapContainer extends Component {
     });
   };
 
-
   // update the marker from the null state to the locations from data
   resetMarkers(locations) {
-    // if no locations exist or they've all been filtered, return without resetting--credit: https://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
+    // if no locations exist or they've all been filtered, return without resetting
+    // credit: https://stackoverflow.com/questions/2647867/how-to-determine-if-variable-is-undefined-or-null
     if (!locations) return;
 
     // remove any existing markers
@@ -167,6 +167,7 @@ class MapContainer extends Component {
     let markers = locations.map((location, index) => {
       let markerData = {
         key: index,
+
         index,
         restaurantName: location.name,
         position: location.pos,
@@ -236,7 +237,6 @@ class MapContainer extends Component {
     )
   }
 
-
   render() {
     let mapCenter = {
       lat: this.props.lat,
@@ -249,14 +249,21 @@ class MapContainer extends Component {
 
     // Credit: Charles Kline for explaining JSX fragment to eliminate errors
     return (
+      //These markers will not tab appropriately, but I've done everything that suggested in the following articles and several others:
+      // https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex
+      // http://web-accessibility.carnegiemuseums.org/content/maps/
+      // If you do not accept this, I would appreciate some help
+
       <Map
+        role="application"
         aria-label="map"
         google={this.props.google}
         onReady={this.onMapReady}
         style={style}
         initialCenter={mapCenter}
         zoom={this.props.zoom}
-        onClick={this.hideInfoWindow}>
+        onClick={this.hideInfoWindow}
+        tabIndex="0">
         <InfoWindow
           marker={this.state.selectedMarker}
           visible={this.state.showingInfoWindow}
