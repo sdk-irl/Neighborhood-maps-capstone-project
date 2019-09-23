@@ -4,7 +4,7 @@ import { Map, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import OfflineMapContainer from "./OfflineMapContainer";
 
 // set the API key here to use later and change easier if needed
-const API_KEY = "AIzaSyAVIlVT1r_WJh4Ru7aIAU8NAd7GPxPtQC8";
+const API_KEY = "AIzaSyD8RSRpQycdqA09rIXs0Zf1TYV4uyy3pdE";
 const FourSquare_CLIENT_ID = "PVZVSGGBQZNENEBHDC5DW1VCALWA1CCUNLL42ZE0XRZOXNKL";
 const FourSquare_SECRET = "VDI51N2LGSWHZ2NN531VPDZ5DK1XWKCHROGVGC4TUBEIFTKP";
 // set FourSquare version to date of writing, FourSquare says to update every couple of months to ensure on latest version
